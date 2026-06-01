@@ -1,0 +1,5 @@
+pandas>=2.0
+kagglehub>=0.3
+requests>=2.31
+fhir.resources>=7.1
+pyspark>=3.5

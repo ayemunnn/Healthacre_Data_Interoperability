@@ -1,0 +1,164 @@
+{
+  "info": {
+    "_postman_id": "7a1a84d4-67bc-4d7b-a25c-ops-fhir-demo",
+    "name": "OPS Junior BA - FHIR R4 API Validation Demo",
+    "description": "Importable Postman collection for validating FHIR R4 API interactions. Default server is the public HAPI FHIR R4 test endpoint. Use synthetic data only.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://hapi.fhir.org/baseR4"
+    }
+  ],
+  "item": [
+    {
+      "name": "1 - Capability Statement",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/metadata",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "metadata"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('CapabilityStatement returned', function () { pm.expect(pm.response.json().resourceType).to.eql('CapabilityStatement'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "2 - Validate Patient Resource",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/fhir+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"patient-demo\",\n  \"identifier\": [\n    {\n      \"system\": \"urn:portfolio:synthetic-patient\",\n      \"value\": \"patient-demo\"\n    }\n  ],\n  \"name\": [\n    {\n      \"text\": \"Demo Patient\"\n    }\n  ],\n  \"gender\": \"unknown\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/Patient/$validate",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Patient",
+            "$validate"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validation request completed', function () { pm.expect(pm.response.code).to.be.oneOf([200, 201, 422]); });",
+              "pm.test('FHIR response is JSON', function () { pm.response.to.be.json; });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "3 - Submit Synthetic Transaction Bundle",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/fhir+json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/fhir+json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"type\": \"transaction\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:patient-demo\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"id\": \"patient-demo\",\n        \"identifier\": [\n          {\n            \"system\": \"urn:portfolio:synthetic-patient\",\n            \"value\": \"patient-demo\"\n          }\n        ],\n        \"name\": [\n          {\n            \"text\": \"Demo Patient\"\n          }\n        ],\n        \"gender\": \"unknown\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\"\n      }\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}",
+          "host": [
+            "{{base_url}}"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Transaction accepted', function () { pm.expect(pm.response.code).to.be.oneOf([200, 201]); });",
+              "pm.test('Bundle response returned', function () { pm.expect(pm.response.json().resourceType).to.eql('Bundle'); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "4 - Search Patients",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/fhir+json"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/Patient?_count=5",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "Patient"
+          ],
+          "query": [
+            {
+              "key": "_count",
+              "value": "5"
+            }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Search Bundle returned', function () { pm.expect(pm.response.json().resourceType).to.eql('Bundle'); });"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
