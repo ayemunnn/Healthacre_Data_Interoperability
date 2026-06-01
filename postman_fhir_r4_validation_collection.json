@@ -1,7 +1,7 @@
 {
   "info": {
-    "_postman_id": "7a1a84d4-67bc-4d7b-a25c-ops-fhir-demo",
-    "name": "OPS Junior BA - FHIR R4 API Validation Demo",
+    "_postman_id": "7a1a84d4-67bc-4d7b-a25c-healthcare-fhir-sample",
+    "name": "Healthcare FHIR R4 API Validation",
     "description": "Importable Postman collection for validating FHIR R4 API interactions. Default server is the public HAPI FHIR R4 test endpoint. Use synthetic data only.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
@@ -60,7 +60,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"patient-demo\",\n  \"identifier\": [\n    {\n      \"system\": \"urn:portfolio:synthetic-patient\",\n      \"value\": \"patient-demo\"\n    }\n  ],\n  \"name\": [\n    {\n      \"text\": \"Demo Patient\"\n    }\n  ],\n  \"gender\": \"unknown\"\n}"
+          "raw": "{\n  \"resourceType\": \"Patient\",\n  \"id\": \"patient-sample\",\n  \"identifier\": [\n    {\n      \"system\": \"urn:healthcare-interoperability:synthetic-patient\",\n      \"value\": \"patient-sample\"\n    }\n  ],\n  \"name\": [\n    {\n      \"text\": \"Sample Patient\"\n    }\n  ],\n  \"gender\": \"unknown\"\n}"
         },
         "url": {
           "raw": "{{base_url}}/Patient/$validate",
@@ -101,7 +101,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"type\": \"transaction\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:patient-demo\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"id\": \"patient-demo\",\n        \"identifier\": [\n          {\n            \"system\": \"urn:portfolio:synthetic-patient\",\n            \"value\": \"patient-demo\"\n          }\n        ],\n        \"name\": [\n          {\n            \"text\": \"Demo Patient\"\n          }\n        ],\n        \"gender\": \"unknown\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\"\n      }\n    }\n  ]\n}"
+          "raw": "{\n  \"resourceType\": \"Bundle\",\n  \"type\": \"transaction\",\n  \"entry\": [\n    {\n      \"fullUrl\": \"urn:uuid:patient-sample\",\n      \"resource\": {\n        \"resourceType\": \"Patient\",\n        \"id\": \"patient-sample\",\n        \"identifier\": [\n          {\n            \"system\": \"urn:healthcare-interoperability:synthetic-patient\",\n            \"value\": \"patient-sample\"\n          }\n        ],\n        \"name\": [\n          {\n            \"text\": \"Sample Patient\"\n          }\n        ],\n        \"gender\": \"unknown\"\n      },\n      \"request\": {\n        \"method\": \"POST\",\n        \"url\": \"Patient\"\n      }\n    }\n  ]\n}"
         },
         "url": {
           "raw": "{{base_url}}",

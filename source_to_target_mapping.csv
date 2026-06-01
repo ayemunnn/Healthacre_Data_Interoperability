@@ -2,14 +2,14 @@ Source Column,FHIR Resource,FHIR Target Path,Transformation Rule,Notes
 Name,Patient,name[0].text,Direct mapping,Synthetic patient display name
 Gender,Patient,gender,Normalize to male | female | other | unknown,FHIR administrative gender
 Age,Patient,extension[url='recorded-age'].valueInteger,Integer conversion,Exact birth date is not fabricated
-Blood Type,Observation,code.text / valueCodeableConcept.text,Create blood-type Observation,Clinical concept represented as text for demo
+Blood Type,Observation,code.text / valueCodeableConcept.text,Create blood-type Observation,Clinical concept represented as text for sample data
 Medical Condition,Condition,code.text,Create Condition linked to patient and encounter,Terminology coding can be added later
 Date of Admission,Encounter,period.start,Parse ISO date,Encounter start
 Discharge Date,Encounter,period.end,Parse ISO date,Encounter end
 Admission Type,Encounter,type[0].text,Direct mapping,"Elective, Emergency, or Urgent"
 Doctor,Practitioner,name[0].text,Deduplicate by normalized name,Referenced from Encounter participant
 Hospital,Organization,name,Deduplicate by normalized name,Referenced as Encounter serviceProvider
-Insurance Provider,Coverage,payor[0].display,Create Coverage resource,Demo display reference
+Insurance Provider,Coverage,payor[0].display,Create Coverage resource,Sample display reference
 Billing Amount,Claim,total.value,Decimal conversion,Claim total in CAD
 Medication,MedicationStatement,medicationCodeableConcept.text,Create medication record,Dataset does not prove a prescription order
 Test Results,Observation,valueCodeableConcept.text,Create admission-test-result Observation,Categorical result mapping
